@@ -4,8 +4,6 @@
 //Fábio Campobianchi, nº.2018915299
 
 #include "comuns.h"
-#include <signal.h>
-#include <unistd.h>
 
 int main(int argc, char **argv, char **envp){
 

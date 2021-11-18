@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
-
+#include <signal.h>
 
 #define  TAM_MAX 50
 #define  SINT_MAX 8

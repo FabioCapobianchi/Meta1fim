@@ -5,8 +5,6 @@
 
 #include "comuns.h"
 #include <sys/wait.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 int b_fifo_fd;
 int c_fifo_fd;
