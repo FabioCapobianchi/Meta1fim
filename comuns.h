@@ -1,3 +1,7 @@
+//Trabalho prático Sistemas Operativos
+//Meta 1
+//Celso Jordão, nº.2003008910
+//Fábio Campobianchi, nº.2018915299
 
 #include <unistd.h>
 #include <stdio.h>
@@ -39,4 +43,5 @@ struct medico{//Medico
 };
 
 int Verifica_cliente(utent c1, char cname[]);
+
 utent criaCliente(utent c1, utent_t copia);
