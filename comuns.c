@@ -5,7 +5,10 @@
 
 #include "comuns.h"
 
+<<<<<<< HEAD
 //Função de verificação da existência de clientes
+=======
+>>>>>>> 022b32152d55aa19978b36b4b0cd69b781df2b42
 int Verifica_cliente(utent c1, char cname[]){
   utent aux;
   aux=c1;
@@ -20,7 +23,10 @@ int Verifica_cliente(utent c1, char cname[]){
   return 1;
 }
 
+<<<<<<< HEAD
 //Função de escrita dos dados de cada cliente
+=======
+>>>>>>> 022b32152d55aa19978b36b4b0cd69b781df2b42
 utent criaCliente(utent c1, utent_t copia){
   utent novo;
 
