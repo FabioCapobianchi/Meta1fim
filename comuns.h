@@ -16,6 +16,7 @@
 
 #define  TAM_MAX 50
 #define  SINT_MAX 8
+#define  PORDEF "default"
 
 //Estrutura de acondicionamento de dados do cliente
 typedef struct cliente utent_t, *utent;

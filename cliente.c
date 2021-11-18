@@ -17,9 +17,10 @@ int main(int argc, char **argv, char **envp){
   char m_fifo_fname[25];
   int read_res;
 
-  while(argc < 2){
-    fprintf(stdout,"Faltam parametros!!!.\n Ex: ./utente <nome utente>\n");
-    exit(EXIT_FAILURE);
+  if(argc < 2){
+    fprintf(stdout,"Faltam parametros!!!.\n Ex: ./utente <nome utente>\n Nome 'default' por defeito\n");
+    argv[1] = PORDEF;
+    //exit(EXIT_FAILURE);
   }
 
   //Cria o FIFO do utente
