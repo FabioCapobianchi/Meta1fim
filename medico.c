@@ -1,3 +1,8 @@
+//Trabalho prático Sistemas Operativos
+//Meta 1
+//Celso Jordão, nº.2003008910
+//Fábio Campobianchi, nº.2018915299
+
 #include "comuns.h"
 #include <signal.h>
 

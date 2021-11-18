@@ -1,3 +1,8 @@
+//Trabalho prático Sistemas Operativos
+//Meta 1
+//Celso Jordão, nº.2003008910
+//Fábio Campobianchi, nº.2018915299
+
 #include "comuns.h"
 #include <sys/wait.h>
 #include <stdlib.h>
@@ -8,7 +13,6 @@ int c_fifo_fd;
 int m_fifo_fd;
 
 int main(int argc, char **argv, char **envp){
-
 
   int bal_to_cla[2];
   int cla_to_bal[2];
@@ -21,62 +25,71 @@ int main(int argc, char **argv, char **envp){
   char c_fifo_fname[50];
   char m_fifo_fname[50];
 
+  fprintf(stdout,"\nMEDICALso\n");
+
 
 fprintf(stdout,"\nMEDICALso\n");
 
+
   res = mkfifo(getenv("BALC_FIFO"), 0777);
+
   if (res == -1){
     perror("\nNao foi possivel abrir o Balcao");
     exit(EXIT_FAILURE);
-}
-fprintf(stderr, "\nBalcao de Atendimento criado\n");
+  }
 
+  fprintf(stderr, "\nBalcao de Atendimento criado\n");
 
+  b_fifo_fd = open(getenv("BALC_FIFO"), O_RDWR);
 
-b_fifo_fd = open(getenv("BALC_FIFO"), O_RDWR);
+  if (b_fifo_fd == -1){
+    perror("\nErro ao abrir Balcao");
+    exit(EXIT_FAILURE);
+  }
 
-if (b_fifo_fd == -1){
-perror("\nErro ao abrir Balcao");
-exit(EXIT_FAILURE);
-}
- fprintf(stderr, "\n Bom Dia\n Balcao aberto para atendimento");
+  fprintf(stderr, "\n Bom Dia\n Balcao aberto para atendimento");
 
- memset(utent.palavra, '\0', TAM_MAX);
+  memset(utent.palavra, '\0', TAM_MAX);
 
- while (1){
+  while (1){
 
-res = read(b_fifo_fd, & utent, sizeof(utent));
-if(res < sizeof(utent)){
-  fprintf(stderr,"\nMensagem ilegivel");
-  continue;
-}
+    res = read(b_fifo_fd, & utent, sizeof(utent));
+    if(res < sizeof(utent)){
+      fprintf(stderr,"\nMensagem ilegivel");
+      continue;
+    }
 
-fprintf(stderr,"\nRecebido de %s sintoma %s\n",utent.nome, utent.palavra);
+    fprintf(stderr,"\nRecebido de %s sintoma %s\n",utent.nome, utent.palavra);
 
- if(!strcasecmp(utent.palavra, "fimb\n")){
+    if(!strcasecmp(utent.palavra, "fimb\n")){
 
-   close(b_fifo_fd);
-   close(c_fifo_fd);
-   unlink(getenv("BALC_FIFO"));
+      close(b_fifo_fd);
+      close(c_fifo_fd);
+      unlink(getenv("BALC_FIFO"));
+      break;
+    }
 
-   break;
- }
- if(!strcmp(utent.palavra, "fim\n")){
-   close(c_fifo_fd);
-   fprintf(stderr,"\nFIFO utente %s fechado\n",utent.nome);
+    if(!strcmp(utent.palavra, "fim\n")){
+      close(c_fifo_fd);
+      fprintf(stderr,"\nFIFO utente %s fechado\n",utent.nome);
+    }
 
- }
+    strcpy(balc.palavra,utent.palavra);
+    strcpy(balc.pnome,utent.nome);
+    balc.pid = utent.pid_utent;
+    fprintf(stderr, "\nutente %s sintoma %s\n",balc.pnome, balc.palavra);
 
-  strcpy(balc.palavra,utent.palavra);
-  strcpy(balc.pnome,utent.nome);
-  balc.pid = utent.pid_utent;
-  fprintf(stderr, "\nutente %s sintoma %s\n",balc.pnome, balc.palavra);
+    sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
 
+    c_fifo_fd = open(c_fifo_fname, O_WRONLY);
 
-sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
+    if(c_fifo_fd == -1)
+    perror("O Cliente nao esta disponivel");
+    else{
+      fprintf(stderr, "\nO Cliente esta pronto");
 
+      res = write(c_fifo_fd, & balc, sizeof(balc));
 
- c_fifo_fd = open(c_fifo_fname, O_WRONLY);
 
  if(c_fifo_fd == -1)
    perror("O Cliente nao esta disponivel");
@@ -89,17 +102,20 @@ sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
            else
            perror("\nerro a escrever ao Cliente");
 
-         close(c_fifo_fd);
-         fprintf(stderr,"\nFIFO utente fechado\n");
-         }
+      if(res == sizeof(balc))
+      fprintf(stderr,"\nescreveu ao Cliente %s\n",utent.palavra);
+      else
+      perror("\nerro a escrever ao Cliente");
 
-}
 
+      close(c_fifo_fd);
+      fprintf(stderr,"\nFIFO utente fechado\n");
+    }
+  }
+  }
 
-//////////////////////////
   fprintf(stdout,"\nBalcao de atendimento\n");
   printf("Insira os sintomas:\n");
-
 
   id=fork();
 
@@ -129,10 +145,10 @@ sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
   wait(NULL);
 
 
-}
-   close(b_fifo_fd);
-    unlink(getenv("BALC_FIFO"));
 
+  }
+  close(b_fifo_fd);
+  unlink(getenv("BALC_FIFO"));
 
-return 0;
+  return 0;
 }
