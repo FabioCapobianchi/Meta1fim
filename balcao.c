@@ -13,8 +13,9 @@ int main(int argc, char **argv, char **envp){
   int bal_to_cla[2];
   int cla_to_bal[2];
   pipe(bal_to_cla);
-  pipe(cla_to_bal);//
+  pipe(cla_to_bal);
   int id,res;
+  utent_t lista;
   utent_t utent;
   balcao_t balc;
   char c_fifo_fname[50];
@@ -22,7 +23,7 @@ int main(int argc, char **argv, char **envp){
 
 
 fprintf(stdout,"\nMEDICALso\n");
-  
+
   res = mkfifo(getenv("BALC_FIFO"), 0777);
   if (res == -1){
     perror("\nNao foi possivel abrir o Balcao");
@@ -81,7 +82,7 @@ sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
    perror("O Cliente nao esta disponivel");
    else{
      fprintf(stderr, "\nO Cliente esta pronto");
-     
+
      res = write(c_fifo_fd, & balc, sizeof(balc));
          if(res == sizeof(balc))
            fprintf(stderr,"\nescreveu ao Cliente %s\n",utent.palavra);
@@ -103,6 +104,7 @@ sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
   id=fork();
 
   if(id == 0){
+
     dup(cla_to_bal[1]);
     close(cla_to_bal[1]);
     close(cla_to_bal[0]);
@@ -114,6 +116,7 @@ sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
     execl("classificador", "classificador",NULL);
 
   }else{
+
 
   dup(cla_to_bal[0]);
   close(cla_to_bal[0]);
