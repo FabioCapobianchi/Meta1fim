@@ -24,7 +24,7 @@ int main(int argc, char **argv, char **envp){
 
   fprintf(stdout,"\nMEDICALso\n");
 
-  res = mkfifo(getenv("BALC_FIFO"), 0777);
+  res = mkfifo(getenv("BALC_FIFO"), 0777);//Criação do FIFO do balcao
 
   if (res == -1){
     perror("\nNao foi possivel abrir o Balcao");
@@ -33,7 +33,7 @@ int main(int argc, char **argv, char **envp){
 
   fprintf(stderr, "\nBalcao de Atendimento criado\n");
 
-  b_fifo_fd = open(getenv("BALC_FIFO"), O_RDWR);
+  b_fifo_fd = open(getenv("BALC_FIFO"), O_RDWR);//Abertura para leitura/escrita do FIFO do balcão
 
   if (b_fifo_fd == -1){
     perror("\nErro ao abrir Balcao");
@@ -55,7 +55,6 @@ int main(int argc, char **argv, char **envp){
     fprintf(stderr,"\nRecebido de %s sintoma %s\n",utent.nome, utent.palavra);
 
     if(!strcasecmp(utent.palavra, "fimb\n")){
-
       close(b_fifo_fd);
       close(c_fifo_fd);
       unlink(getenv("BALC_FIFO"));
@@ -74,14 +73,14 @@ int main(int argc, char **argv, char **envp){
 
     sprintf(c_fifo_fname, getenv("CLIENT_FIFO"), utent.pid_utent);
 
-    c_fifo_fd = open(c_fifo_fname, O_WRONLY);
+    c_fifo_fd = open(c_fifo_fname, O_WRONLY); //Abertura para leitura do FIFO do cliente
 
     if(c_fifo_fd == -1)
     perror("O Cliente nao esta disponivel");
     else{
       fprintf(stderr, "\nO Cliente esta pronto");
 
-      res = write(c_fifo_fd, & balc, sizeof(balc));
+      res = write(c_fifo_fd, & balc, sizeof(balc)); //Escrita dos dados recebidos do cliente para o balcão
 
       if(res == sizeof(balc))
       fprintf(stderr,"\nescreveu ao Cliente %s\n",utent.palavra);
@@ -95,7 +94,8 @@ int main(int argc, char **argv, char **envp){
 
   fprintf(stdout,"\nBalcao de atendimento\n");
   printf("Insira os sintomas:\n");
-
+  
+//Pipe entre o balcão e o classificador
   id=fork();
 
   if(id == 0){

@@ -17,23 +17,26 @@
 #define  TAM_MAX 50
 #define  SINT_MAX 8
 
+//Estrutura de acondicionamento de dados do cliente
 typedef struct cliente utent_t, *utent;
-struct cliente{//cliente
+struct cliente{
  pid_t pid_utent;
  char nome[TAM_MAX];
  char palavra[TAM_MAX];
  utent next;
 };
 
+//Estrutura de acondicionamento de dados do balcao
 typedef struct balcao balcao_t, *balc;
-struct balcao{//Balcao
+struct balcao{
   int pid;
   char pnome[TAM_MAX];
   char palavra[TAM_MAX];
 };
 
+//Estrutura de acondicionamento de dados do medico
 typedef struct medico medic_t, *medic;
-struct medico{//Medico
+struct medico{
   pid_t pid_medic;
   char mnome[TAM_MAX];
   char espec[TAM_MAX];
