@@ -94,7 +94,7 @@ int main(int argc, char **argv, char **envp){
 
   fprintf(stdout,"\nBalcao de atendimento\n");
   printf("Insira os sintomas:\n");
-  
+
 //Pipe entre o balcão e o classificador
   id=fork();
 
@@ -122,6 +122,7 @@ int main(int argc, char **argv, char **envp){
     wait(NULL);
 
   }
+
   close(b_fifo_fd);
   unlink(getenv("BALC_FIFO"));
 
