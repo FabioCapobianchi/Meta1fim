@@ -6,7 +6,6 @@
 #include "comuns.h"
 #include <signal.h>
 
-
 int main(int argc, char **argv){
 
 int b_fifo_fd;
